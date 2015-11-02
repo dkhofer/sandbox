@@ -77,6 +77,8 @@ end
 
 def random_matrix(n)
   r = Random.new
+  # NOTE(hofer): This way of initializing seems to be a bit faster
+  # (like 10-20%) than using Matrix.new(n, n, r.next_float)
   m = Matrix.new(n, n, 0.0)
   (0..n-1).each do |i|
     (0..n-1).each do |j|
