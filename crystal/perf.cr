@@ -1,6 +1,6 @@
 require "benchmark"
 require "complex"
-require "matrix"
+require "crystalla"
 
 # Fibonacci
 def fib(n)
@@ -76,17 +76,7 @@ def pisum
 end
 
 def random_matrix(n)
-  r = Random.new
-  # NOTE(hofer): This way of initializing seems to be a bit faster
-  # (like 10-20%) than using Matrix.new(n, n, r.next_float)
-  m = Matrix.new(n, n, 0.0)
-  (0..n-1).each do |i|
-    (0..n-1).each do |j|
-      m[i,j] = r.next_float
-    end
-  end
-
-  return m
+  Crystalla::Matrix.rand(n, n)
 end
 
 def randmatstat(t)
@@ -95,30 +85,9 @@ def randmatstat(t)
   w = Array.new(t, 0.0)
 
   (0..t-1).each do |i|
-    a = random_matrix(n)
-    b = random_matrix(n)
-    c = random_matrix(n)
-    d = random_matrix(n)
+    p = Crystalla::Matrix.rand(n, 4*n)
 
-    p = Matrix.new(n, 4*n, 0.0)
-    (0..n-1).each do |j|
-      (0..n-1).each do |k|
-        p[j,k] = a[j,k]
-        p[j,n+k] = b[j,k]
-        p[j,2*n+k] = c[j,k]
-        p[j,3*n+k] = d[j,k]
-      end
-    end
-
-    q = Matrix.new(2*n, 2*n, 0.0)
-    (0..n-1).each do |j|
-      (0..n-1).each do |k|
-        q[j,     k] = a[j,k]
-        q[j,   n+k] = b[j,k]
-        q[n+j,   k] = c[j,k]
-        q[n+j, n+k] = d[j,k]
-      end
-    end
+    q = Crystalla::Matrix.rand(2*n, 2*n)
 
     p = p.transpose * p
     p = p * p
