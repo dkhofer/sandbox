@@ -4,4 +4,4 @@ version: 0.1.0
 dependencies:
   crystalla:
 #    github: mverzilli/crystalla
-    path: /Users/hofer/github-repos/crystalla
+    path: /Users/hofer/coding/crystalla

@@ -1,6 +1,7 @@
 require "benchmark"
 require "complex"
 require "crystalla"
+require "matrix"
 
 # Fibonacci
 def fib(n)
@@ -113,7 +114,6 @@ def randmatstat(t)
 end
 
 def randmatmul(n)
-  r = Random.new
   a = random_matrix(n)
   b = random_matrix(n)
 
@@ -126,6 +126,29 @@ end
 
 def print_perf(name, time)
   puts "crystal,#{name},#{time * 1000}"
+end
+
+def verify_crystalla_multiplication
+  r = Random.new
+  a = Matrix.new(10, 10, 0.0)
+  b = Matrix.new(10, 10, 0.0)
+  (0..9).each do |i|
+    (0..9).each do |j|
+      a[i,j] = r.next_float
+      b[i,j] = r.next_float
+    end
+  end
+
+  c = Crystalla::Matrix.rows(a.rows)
+  d = Crystalla::Matrix.rows(b.rows)
+  e = Crystalla::Matrix.rows((a*b).rows)
+  f = c * d
+
+  (0..9).each do |i|
+    (0..9).each do |j|
+      assert((e[i,j] - f[i,j]).abs < 1e-10)
+    end
+  end
 end
 
 def main
@@ -166,6 +189,8 @@ def main
 
   t = Benchmark.measure { randmatmul(1000) }
   print_perf("rand_mat_mul", t.real)
+
+  verify_crystalla_multiplication
 end
 
 main()

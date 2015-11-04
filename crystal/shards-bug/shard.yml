@@ -1,8 +1,0 @@
-name: test
-version: 0.1.0
-
-dependencies:
-  crystal-pg:
-    github: will/crystal-pg
-    branch: master
-#    path: /Users/hofer/github-repos/crystal-pg
